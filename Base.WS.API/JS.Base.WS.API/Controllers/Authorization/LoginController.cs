@@ -27,7 +27,7 @@ namespace JS.Base.WS.API.Controllers.Authorization
     public class LoginController : ApiController
     {
         private MyDBcontext db;
-        private ConfigurationParameterService ConfigurationParameterService;
+        private readonly ConfigurationParameterService ConfigurationParameterService;
         private UserService UserService;
         private Response response;
 
@@ -284,7 +284,7 @@ namespace JS.Base.WS.API.Controllers.Authorization
                 var token = TokenGenerator.GenerateTokenJwt(payLoad);
 
                 // refreshToken
-                string _lifeDate = DateTime.Now.AddMinutes(expireTime + 1).ToString();
+                string _lifeDate = DateTime.Now.AddMinutes(expireTime + 2).ToString();
                 string refreshToken = string.Concat(currentUser.UserName, ',', currentUser.Password, ',', _lifeDate);
                 refreshToken = Utilities.Security.Encrypt_TwoWay(refreshToken);
 
@@ -456,7 +456,7 @@ namespace JS.Base.WS.API.Controllers.Authorization
             if (DateTime.Now >= sessionDate)
             {
                 response.Code = "400";
-                response.Message = "Sesión expirada";
+                response.Message = "Estimado usuario su sesión ha expirada";
 
                 return Ok(response);
             }
@@ -491,7 +491,7 @@ namespace JS.Base.WS.API.Controllers.Authorization
 
 
             // refreshToken
-            string _lifeDate = DateTime.Now.AddMinutes(expireTime + 1).ToString();
+            string _lifeDate = DateTime.Now.AddMinutes(expireTime + 2).ToString();
             string _refreshToken = string.Concat(currentUser.UserName, ',', currentUser.Password, ',', _lifeDate);
             _refreshToken = Utilities.Security.Encrypt_TwoWay(_refreshToken);
 
